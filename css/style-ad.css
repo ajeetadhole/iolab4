@@ -146,7 +146,7 @@ body {
 .trackHoverMeta {
 	line-height: 24px;
 	font-weight: 400;
-	font-size: 15px;
+	font-size: 16px;
 	color:#999;
 	float:left;
 	padding: 2px 5px 0 5px;
@@ -156,17 +156,31 @@ body {
 	line-height: 24px;
 	font-weight: 400;
 	font-size: 15px;
-	color:#999;
+	color:rgba(85, 151, 183, 1.0);
 	float:left;
-	padding: 12px 5px 0 5px;
+	padding: 7px 5px 2px 5px;
+	cursor:pointer;
+	font-weight: 300;
+	-webkit-transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	-ms-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
+}
+
+#trackHoverChart:hover {
+	color:rgba(235, 86, 53, 1.0);
+	-webkit-transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	-ms-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
 }
 
 #trackHoverMetro p{
 	line-height: 22px;
 	font-weight: 500;
-	font-size: 18px;
+	font-size: 20px;
 	color:#222;
-	padding:1px 5px 5px 5px;
+	padding:1px 5px 12px 5px;
 }
 
 #trackHoverImg{
@@ -185,7 +199,6 @@ body {
 	background:#aaa;
 	z-index: 150;
 	box-shadow: 1px 1px 3px #bbb;
-	display:none;
 }
 
 .chart {
