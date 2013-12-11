@@ -33,7 +33,13 @@
     var cityCircle;
     var geocoder;
     var map;
-    var infowindow = new google.maps.InfoWindow();
+    var contentString = '<div id>'+ 
+      '<iframe src="toptracks_bars.html" width="700px" height="500px"></iframe>'+
+      ' <span id="modalClose">X</span>'+
+      '</div>';
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });    
     var marker;
 
     //deferred object: Indicates that all TOPTRACKS are processed
@@ -150,9 +156,6 @@ function initialize() {
             {
                 if(ALLTOPTRACKS[iterate]["city"]==city)
                 {
-                  toptrackname=ALLTOPTRACKS[iterate]["toptrack"];
-                  toptrackartist=ALLTOPTRACKS[iterate]["toptrackartist"];
-                  toptrackurl=ALLTOPTRACKS[iterate]["toptrackurl"];
                   trackindex=result.indexOf(ALLTOPTRACKS[iterate]["toptrack"]);
                   metrocolor=colors[trackindex];
                   console.log("COLOR for metro"+city+" is"+metrocolor);
@@ -173,54 +176,35 @@ function initialize() {
           var populationOptions = {
             icon: newCityCircle,
             map: map,
+            title: city,
             position: new google.maps.LatLng(citymap[city]['center']['nb'],citymap[city]['center']['ob'] ),
           };
 
-          marker = new google.maps.Marker(populationOptions);
-
-//hover event: start
-          var contentStringCal = '<p>'+toptrackurl+'</p><p>'+city+'</p><p>'+toptrackname+'</p><p>'+toptrackartist+'</p>';
-         console.log(contentStringCal);
-          var infowindow = new google.maps.InfoWindow({});
-
-          google.maps.event.addListener(marker, "mouseover", function() {
-
-             
-
-              //open the infowindow when it's not open yet
-
-            if(contentStringCal!=infowindow.getContent())
-            {
-              console.log("hovered city="+this.getPosition());
-              infowindow.setPosition(this.getPosition());
-              infowindow.setContent(contentStringCal);
-              infowindow.open(map,marker);
-            }
-
-          }); 
-          //clear the contents of the infwindow on closeclick
-          google.maps.event.addListener(infowindow, 'closeclick', function() {
-                infowindow.setContent('');
-          });
-
-//hover event: end
-
-
-
+          marker = new google.maps.Marker(populationOptions); 
           // On click
-          google.maps.event.addListener(marker, 'click', function(event) {
-        
-           window.alert("this div");
-           codeLatLng(latlng);
+
+        google.maps.event.addListener(marker, 'click', function(event) {
+          //getmodal(marker);
+            // MAPDATA.push(marker.title);
+            // window.alert(marker.title);
+            // infowindow.setContent(marker.title)
+            infowindow.open(map, marker);
           });
+
+         // google.maps.event.trigger(marker, "click");
 
           }
 
       });
 
+   
+
 }
 
+function getmodal(marker) {
+  window.alert(marker.title)
 
+}
 
 function codeLatLng(latlng) {
     console.log("codelatlng");
@@ -233,12 +217,14 @@ function codeLatLng(latlng) {
     geocoder.geocode({'latLng': latlng}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[1]) {
+          console.log("in results");
           map.setZoom(5);
           marker = new google.maps.Marker({
               position: latlng,
               map: map
           });
           MAPDATA.push(results[1].formatted_address.split(',')[0]);
+          renderModalData();
           infowindow.setContent(results[1].formatted_address);
           infowindow.open(map, marker);
         }
@@ -248,6 +234,14 @@ function codeLatLng(latlng) {
     });
   }
 
+//binds the data to modal
+function renderModalData(){
+  $.each(TOPTRACKS, function(i, val) {
+       console.log(val);
+    });
+
+
+}
 /*----getMetroData-----*/
 function getMetroData(){
       $.ajax({
