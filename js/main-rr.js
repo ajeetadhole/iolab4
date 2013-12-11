@@ -170,7 +170,7 @@ function initialize() {
               strokeColor: 'FFFFFF',
               strokeWeight:2,
               strokeOpacity:0.8,
-              scale:0.12
+              scale:0.1
           }
 
           var populationOptions = {
