@@ -146,7 +146,38 @@ body {
     opacity:0.8;
 }
 
+.trackHoverMeta {
+	line-height: 24px;
+	font-weight: 400;
+	font-size: 15px;
+	color:#999;
+	float:left;
+	padding: 2px 5px 0 5px;
+}
 
+#trackHoverChart {
+	line-height: 24px;
+	font-weight: 400;
+	font-size: 15px;
+	color:#999;
+	float:left;
+	padding: 12px 5px 0 5px;
+}
+
+#trackHoverMetro p{
+	line-height: 22px;
+	font-weight: 500;
+	font-size: 18px;
+	color:#222;
+	padding:1px 5px 5px 5px;
+}
+
+#trackHoverImg{
+	width:50px;
+	height:50px;
+	float:left;
+	padding:5px 5px 6px 5px;
+}
 
 #videoPlayer{
 	width:270px;

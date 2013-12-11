@@ -158,7 +158,7 @@ function initialize() {
                 {
                   trackindex=result.indexOf(ALLTOPTRACKS[iterate]["toptrack"]);
                   metrocolor=colors[trackindex];
-                  console.log("COLOR for metro"+city+" is"+metrocolor);
+                  //console.log("COLOR for metro "+city+" is"+metrocolor+" Top track is "+ALLTOPTRACKS[iterate]["toptrack"]);
                 }
                
             }
@@ -181,6 +181,58 @@ function initialize() {
           };
 
           marker = new google.maps.Marker(populationOptions); 
+
+//hover event: start
+          
+          var infowindow = new google.maps.InfoWindow({});
+          
+          google.maps.event.addListener(marker, "mouseover", function() {
+            
+              console.log("hovered city="+this.getPosition().lat());
+              var hovercity, hovercontent,toptracknametemp,toptrackartisttemp,toptrackurltemp,trackindextemp,metrocolortemp,toptrackartistimgtemp;
+              for (var city in citymap) {
+                if(citymap[city]['center']['nb']==this.getPosition().lat()&&citymap[city]['center']['ob']==this.getPosition().lng()){
+                    hovercity=city;
+                    
+                    //get the track for the hovered city
+                    for (var iterate=0;iterate<ALLTOPTRACKS.length;iterate++)
+                    {
+                        if(ALLTOPTRACKS[iterate]["city"]==city)
+                        {
+                          toptracknametemp=ALLTOPTRACKS[iterate]["toptrack"];
+                          toptrackartisttemp=ALLTOPTRACKS[iterate]["toptrackartist"];
+                          toptrackurltemp=ALLTOPTRACKS[iterate]["toptrackurl"];
+                          toptrackartistimgtemp=ALLTOPTRACKS[iterate]["toptrackartistimg"];
+
+                          trackindextemp=result.indexOf(ALLTOPTRACKS[iterate]["toptrack"]);
+                          metrocolortemp=colors[trackindex];
+                          
+                        }
+                       
+                    }
+
+                     hovercontent = '<div id="trackHoverMetro"><p>Metro: '+city+'</p></div><div><img id="trackHoverImg" src='+toptrackartistimgtemp+'></img></div><div><p class="trackHoverMeta">Top Track: '+toptracknametemp+'</p><p class="trackHoverMeta">Artist: '+toptrackartisttemp+'</p></div>';
+                    //' <div id="marker"> <div id="trackHoverCard"><div class="trackHoverMeta"> <div id="trackHoverArt"><span id="trackHoverPlay">'+toptrackurltemp+'</span></div><div id="trackHoverTitle"><span id="trackHoverName">'+city+'</span><span id="trackHoverName">'+toptracknametemp+'</span> <span id="trackHoverArtist">'+toptrackartisttemp+'</span></div></div> </div> </div>';
+
+                }
+              }
+              
+
+              infowindow.setPosition(this.getPosition());
+              infowindow.setContent(hovercontent);
+              marker.setPosition(this.getPosition());
+              infowindow.open(map,marker);
+            
+
+          }); 
+          //clear the contents of the infwindow on closeclick
+          google.maps.event.addListener(infowindow, 'closeclick', function() {
+                infowindow.setContent('');
+          });
+//hover event: end
+
+
+
           // On click
 
         google.maps.event.addListener(marker, 'click', function(event) {
@@ -283,7 +335,6 @@ function getData(){
 function getTopTracks(country,city){
 //dheera start
 var url="http://ws.audioscrobbler.com/2.0/?method=geo.getTopTracks&api_key="+apiKey+"&country="+country+"&city="+city+"&format=json";
-console.log(url);
 $.getJSON(url,function(data) {
   var index=0;
     $.each(data, function(key, value) {
@@ -305,6 +356,22 @@ $.getJSON(url,function(data) {
             obj["city"]=city;
             obj["country"]=country;
             obj["toptrack"]=data.toptracks.track[0]["name"];
+            obj["toptrack"]=data.toptracks.track[0]["name"];
+            obj["toptrackurl"]=data.toptracks.track[0]["url"];
+
+
+            obj["toptrackartist"]=data.toptracks.track[0]["artist"]["name"];
+            
+             var x=data.toptracks.track[0]["image"];
+
+             if (typeof x != "undefined") {
+               
+               obj["toptrackartistimg"]=x[0]["#text"];
+            }
+            else{
+              console.log("no image for city"+city);
+              obj["toptrackartistimg"]="";
+            }
             
 
             
