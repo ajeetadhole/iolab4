@@ -19,6 +19,7 @@
     var TOPCHARTS =[];
     var METROS={};
     var MAPDATA=[];
+    var LEGENDVIDEO=[];
 
     //use these for displaying legend
     var ALLTOPTRACKS = [];
@@ -55,8 +56,13 @@ $(window).load(function () {
     $('#ytapiplayer').show();
     console.log("doc load");
     //TODO - Need to pass the artist and track on the click event in modal
+<<<<<<< HEAD
     //loadPlayer("Lorde", "Royals");
 
+=======
+    loadPlayer("royals", "royals");
+    
+>>>>>>> 8c1b86619d37157a89835ac669cbdc92cc6c7cab
     //start: added by dheera
 
     //display map by gettin all metros for last.fm from metros.json file which is a cached JSON file with information about metros that last.fm operates in  
@@ -89,9 +95,15 @@ $(window).load(function () {
         console.log("Integration Point - RenderData Fn here");
         //TODO - Invoke renderData here
     })
+    $('div#legend ul#legendlist li.legendItem p.trackLegendName a').click(function () {
+    
+    console.log("in li click");
+    alert("this li");
+    });
     
 
 });
+
 
 function initialize() {
 
@@ -143,7 +155,7 @@ function initialize() {
           var randcolor = result[Math.floor(Math.random() * result.length)];
           for(var index=0;index<result.length;index++)
           {
-            $("#legendlist").append('<li class="legendItem"><span class="trackLegendColor" style="background:'+colors[index]+';"></span><p class="trackLegendName">'+result[index]+'</p></li>');
+            $("#legendlist").append('<li class="legendItem"><span class="trackLegendColor" style="background:'+colors[index]+';"></span><p class="trackLegendName"><a href=#>'+result[index]+'</a></p></li>');
           
           }
 
