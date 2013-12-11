@@ -1,6 +1,6 @@
 
 
-<h1>Visualizations with Last.fm</h1>
+<h1>Music Map</h1>
 
 <h3>Project Description</h3>
 <p>Music is not visual after all. But when there are millions of songs, it is useful to have some tools to help with this process of discovery. Recommendation and playlists, through visualisation. Visualisations can “tell a story, and engage our pattern-matching brain” (Donaldson & Lamere, ISMIR 2009).
