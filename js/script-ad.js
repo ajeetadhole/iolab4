@@ -5,6 +5,10 @@ $(document).ready(function(){
     var infoHeight = $('#info').height();
     var infoWidth = $('#info').width();
 
+    $('#wrapper').css({
+        width: viewportWidth,
+        height: viewportHeight,
+    });
 
     $('#infoWrapper').css({
         width: viewportWidth,
@@ -78,27 +82,29 @@ $(document).ready(function(){
     //     }
     // );
 
-    // $('#marker').click(
-    //     function(){
-    //         $('#metroChartModal').css({
-    //             display:'block',
-    //         });
-    //         $('#metroChartModal').filter(':not(:animated)').animate({
-    //             opacity:1,
-    //         },100);
-    //     }
-    // );
 
-    //  $('#modalClose').click(
-    //     function() {
-    //         $('#metroChartModal').animate({
-    //             opacity:0,
-    //         },100);
-    //         $('#metroChartModal').css({
-    //             display:'none',
-    //         });
-    //     }
-    // );
+
+    $("#trackHoverMetro").on("click", "#trackHoverChart", 
+        function(){
+            $('#videoPlayer').css({
+                display:'none',
+            });
+            $('#videoPlayer').filter(':not(:animated)').animate({
+                opacity:0,
+            },100);
+        }
+    );
+
+    $('#modalClose').click(
+        function() {
+            $('#metroChartModal').animate({
+                opacity:0,
+            },100);
+            $('#metroChartModal').css({
+                display:'none',
+            });
+        }
+    );
 
 });
 
