@@ -167,10 +167,10 @@ function initialize() {
               path: 'M 100 100 L 300 100 L 200 300 z',
               fillColor: metrocolor,
               fillOpacity: 0.8,
-              strokeColor: 'FFFFFF',
-              strokeWeight:2,
+              strokeColor: metrocolor,
+              strokeWeight:16,
               strokeOpacity:0.8,
-              scale:0.1
+              scale:0.0001
           }
 
           var populationOptions = {
