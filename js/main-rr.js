@@ -210,12 +210,8 @@ function initialize() {
                         }
                        
                     }
-
-<<<<<<< HEAD
+                    
                      hovercontent = '<div id="trackHoverMetro"><p>Metro: '+city+'</p></div><div><img id="trackHoverImg" src='+toptrackartistimgtemp+'></img></div><div><p class="trackHoverMeta">Top Track: '+toptracknametemp+'</p><p class="trackHoverMeta">Artist: '+toptrackartisttemp+'</p></div>';
-=======
-                     hovercontent = '<p><img src='+toptrackartistimgtemp+'></img></p><p><a href='+toptrackurltemp+'>'+toptrackurltemp+'</a></p><p>City name: '+city+'</p><p>Track name: '+toptracknametemp+'</p><p>Artist name: '+toptrackartisttemp+'</p>';
->>>>>>> 23dd96e18671bdee6e21671412035abe02359c3f
                     //' <div id="marker"> <div id="trackHoverCard"><div class="trackHoverMeta"> <div id="trackHoverArt"><span id="trackHoverPlay">'+toptrackurltemp+'</span></div><div id="trackHoverTitle"><span id="trackHoverName">'+city+'</span><span id="trackHoverName">'+toptracknametemp+'</span> <span id="trackHoverArtist">'+toptrackartisttemp+'</span></div></div> </div> </div>';
 
                 }
