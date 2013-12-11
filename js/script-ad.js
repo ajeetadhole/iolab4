@@ -81,30 +81,27 @@ $(document).ready(function(){
     //         });
     //     }
     // );
+    // $("#trackHoverChart").on("click",  
+    //     function(){
+    //         $('#metroChartModal').css({
+    //             display:'block',
+    //         });
+    //         $('#metroChartModal').filter(':not(:animated)').animate({
+    //             opacity:1,
+    //         },100);
+    //     }
+    // );
 
-
-
-    $("#trackHoverMetro").on("click", "#trackHoverChart", 
-        function(){
-            $('#videoPlayer').css({
-                display:'none',
-            });
-            $('#videoPlayer').filter(':not(:animated)').animate({
-                opacity:0,
-            },100);
-        }
-    );
-
-    $('#modalClose').click(
-        function() {
-            $('#metroChartModal').animate({
-                opacity:0,
-            },100);
-            $('#metroChartModal').css({
-                display:'none',
-            });
-        }
-    );
+    // $('#modalClose').click(
+    //     function() {
+    //         $('#metroChartModal').animate({
+    //             opacity:0,
+    //         },100);
+    //         $('#metroChartModal').css({
+    //             display:'none',
+    //         });
+    //     }
+    // );
 
 });
 
