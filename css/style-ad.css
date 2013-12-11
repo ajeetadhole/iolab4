@@ -1,0 +1,248 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body {
+	background: #fff;
+	font-family: 'Open Sans';
+	font-size: 15px;
+	color:#666;
+	font-weight: 300;
+}
+
+#map {
+	background-size: cover;
+	width:100%;
+	height:900px;
+	position:relative;
+	top:0;
+	left:0;
+	overflow:hidden;
+}
+
+
+
+
+
+#legend {
+	width:270px;
+	position:absolute;
+	top:0px;
+	right:6px;
+	background: rgba(255,255,255,1);
+	box-shadow: 1px 1px 3px #bbb;
+	z-index: 125;
+}
+
+#legendHeaderMin {
+	padding:10px 0 10px 0;
+	width:100px;
+    color:#aaa;
+    font-weight: 400;
+    background: rgba(0,0,0,1);
+    height:18px;
+    position:absolute;
+    top:0;
+    right:6px;
+    z-index: 130;
+    cursor:pointer;
+}
+
+#legendHeaderMin p {
+	float:left;
+	padding-left:7px;
+}
+
+#legendHeaderMin:hover {
+	color:#eee;
+}
+
+#legendHeaderMax {
+	padding:10px 0 10px 22px;
+	width:248px;
+    box-shadow: 1px -2px 2px #bbb;
+    color:#666;
+    font-weight: 400;
+    background: #f5f5f5;
+    height:18px;
+    z-index: 130;
+    cursor:pointer;
+}
+
+#legendHeaderMax p {
+	float:left;
+	padding-left:9px;
+}
+
+#legendHeaderMax:hover {
+	color:#000;
+	background: #dedede;
+}
+
+.legendItem {
+    padding:14px 28px 14px 28px;
+    border-bottom: 1px solid #f5f5f5;
+    color:#333;
+    font-size: 12px;
+}
+
+/*
+.legendItem:hover {
+	color:rgba(235, 86, 53, 1.0);
+}
+*/
+
+.trackLegendColor {
+    height:14px;
+    width:14px;
+    border-radius: 50%;
+    margin: 0 14px 0 0;
+    float:left;
+    opacity:0.8;
+}
+
+
+
+#videoPlayer{
+	width:270px;
+	height:150px;
+	position:absolute;
+	right:6px;
+	bottom:20px;
+	background:#aaa;
+	z-index: 150;
+	box-shadow: 1px 1px 3px #bbb;
+	display:none;
+}
+
+.chart {
+	margin-top: 0;
+}
+
+.popularity {
+	font: 16px sans-serif;
+	font-family: "Open Sans";
+	font-weight:100;
+	text-anchor: end;
+	fill: white;
+}
+
+.album-art {
+	opacity:0.1;
+}
+
+.count {
+	font:18px sans-serif;
+	font-family: "Open Sans";
+	font-weight:100;
+	fill:#666;
+}
+
+a:hover {
+	fill:#fff;
+}
+
+.track {
+	font: 16px sans-serif;
+	font-family: "Open Sans";
+	font-weight:300;
+	fill:#fff;
+}
+
+.artist {
+	font: 12px sans-serif;
+	font-family: "Open Sans";
+	font-weight:300;
+	fill:#fff;
+}
+
+h1 {
+	font-family: "Open Sans";
+	font-weight: 500;
+	font-size:26px;
+	color:#333;
+	padding:15px 0 20px 60px;
+}
+
+
+
+/*added by dheera*/
+ 
+
+#slider {
+    top: 4px;
+    position: relative;
+    width: 250px;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+.ui-slider .ui-slider-handle {
+    width: 0.7em !important;
+    margin-left: -0.35em !important;
+    cursor: default;
+}
+
+#sliderVal {
+    display:inline-block;
+    margin-left: 30px;
+}
+
+
+#timeSlider {
+    text-align: center;
+    font-size: 24px;
+    margin: 0 auto;
+    padding-left: 120px;
+    min-height: 70px;
+    line-height: 70px;
+    background: url(../img/binding_dark.png) repeat;
+    color: #666;
+}
+/*end:added by dheera*/
+
