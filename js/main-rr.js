@@ -55,7 +55,7 @@ $(window).load(function () {
     $('#ytapiplayer').show();
     console.log("doc load");
     //TODO - Need to pass the artist and track on the click event in modal
-    loadPlayer("Lorde", "Royals");
+    //loadPlayer("Lorde", "Royals");
 
     //start: added by dheera
 
@@ -221,6 +221,7 @@ function initialize() {
               infowindow.setPosition(this.getPosition());
               infowindow.setContent(hovercontent);
               marker.setPosition(this.getPosition());
+              $("#metroChartModal").append("<h1>HELLO</h1>");
               infowindow.open(map,marker);
             
 
@@ -498,6 +499,11 @@ function getMetroTrackCharts(country, city){
         }
     });
 }
+
+$("#legend #legendlist").on("click", ".legendItem",function(){
+  console.log($(this).find("p").text());
+
+  });
 
 
 function loadPlayer(artist, track) {

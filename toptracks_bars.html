@@ -63,8 +63,7 @@ bar.append("text")
     .attr("class", "popularity");
 
 // Add album cover image
-bar.append("image")
-	.attr("xlink:href", function(d) {return d.image[1]['#text'];})
+bar.append("rect")
 	.attr("width","40")
 	.attr("height","40")
 	.attr("x", "-40")
