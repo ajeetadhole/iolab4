@@ -1,5 +1,4 @@
 
-
 <h1>Music Map</h1>
 
 <h3>Project Description</h3>
@@ -31,7 +30,7 @@ Vanessa McAfee - JavaScript/jQuery/jQueryUI work, working with last.fm API and g
 <p>HTML, CSS, JavaScript/jQuery, D3.js, Last.fm API, google maps API</p>
 
 <h3>Link to the demo</h3>
-<p>http://people.ischool.berkeley.edu/~ajeeta/iolab4/</p>
+<p>http://people.ischool.berkeley.edu/~ruchitarathi/p4/</p>
 
 <h3>Known Bugs</h3>
 <p></p>
