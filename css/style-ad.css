@@ -48,17 +48,21 @@ table {
 }
 
 body {
-	background: #fff;
+	background: #b7d2fd;
 	font-family: 'Open Sans';
 	font-size: 15px;
 	color:#666;
 	font-weight: 300;
 }
 
+#wrapper {
+	background: #b7d2fd;
+}
+
 #map {
 	background-size: cover;
 	width:100%;
-	height:900px;
+	height:100%;
 	position:relative;
 	top:0;
 	left:0;
@@ -175,7 +179,7 @@ body {
 	-o-transition: all .2s ease-in-out;
 }
 
-#trackHoverMetro p{
+#trackHoverMetro {
 	line-height: 22px;
 	font-weight: 500;
 	font-size: 20px;
@@ -190,6 +194,48 @@ body {
 	padding:5px 5px 6px 5px;
 }
 
+#metroChartModal {
+	width:700px;
+	height:500px;
+	background:#fff;
+	box-shadow: 1px 1px 3px #999;
+	position:absolute;
+	margin-top: 20px;
+	margin-left: 40px;
+    z-index: 145;
+    opacity:0;
+    display:none;
+}
+
+#modalClose {
+	width:18px;
+	height:18px;
+	padding:10px 17px 0 0;
+	color: #999;
+	font-size: 28px;
+	font-weight: 400;
+	color:#ddd;
+	border-radius: 50%;
+	text-align: center;
+	position:absolute;
+	top: 0;
+	right: 0px;
+    z-index: 150;
+    cursor:pointer;
+    -webkit-transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	-ms-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
+}
+
+#modalClose:hover {
+	color:#555;
+	-webkit-transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	-ms-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
+}
+
 #videoPlayer{
 	width:270px;
 	height:150px;
@@ -200,6 +246,8 @@ body {
 	z-index: 150;
 	box-shadow: 1px 1px 3px #bbb;
 }
+
+
 
 .chart {
 	margin-top: 0;

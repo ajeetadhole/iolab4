@@ -218,7 +218,7 @@ function initialize() {
                        
                     }
 
-                     hovercontent = '<div id="trackHoverMetro"><p>Metro: '+city+'</p></div><div><img id="trackHoverImg" src='+toptrackartistimgtemp+'></img><div><p class="trackHoverMeta">Top Track: '+toptracknametemp+'</p><p class="trackHoverMeta">Artist: '+toptrackartisttemp+'</p></div></div><div id="trackHoverChart"><p>View Metro Track Chart</p></div>';
+                     hovercontent = '<p id="trackHoverMetro">Metro: '+city+'</p><div><img id="trackHoverImg" src='+toptrackartistimgtemp+'></img><div><p class="trackHoverMeta">Top Track: '+toptracknametemp+'</p><p class="trackHoverMeta">Artist: '+toptrackartisttemp+'</p></div></div>';
                     //' <div id="marker"> <div id="trackHoverCard"><div class="trackHoverMeta"> <div id="trackHoverArt"><span id="trackHoverPlay">'+toptrackurltemp+'</span></div><div id="trackHoverTitle"><span id="trackHoverName">'+city+'</span><span id="trackHoverName">'+toptracknametemp+'</span> <span id="trackHoverArtist">'+toptrackartisttemp+'</span></div></div> </div> </div>';
 
                 }

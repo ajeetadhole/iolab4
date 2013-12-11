@@ -5,6 +5,10 @@ $(document).ready(function(){
     var infoHeight = $('#info').height();
     var infoWidth = $('#info').width();
 
+    $('#wrapper').css({
+        width: viewportWidth,
+        height: viewportHeight,
+    });
 
     $('#infoWrapper').css({
         width: viewportWidth,
@@ -77,8 +81,7 @@ $(document).ready(function(){
     //         });
     //     }
     // );
-
-    // $('#marker').click(
+    // $("#trackHoverChart").on("click",  
     //     function(){
     //         $('#metroChartModal').css({
     //             display:'block',
@@ -89,7 +92,7 @@ $(document).ready(function(){
     //     }
     // );
 
-    //  $('#modalClose').click(
+    // $('#modalClose').click(
     //     function() {
     //         $('#metroChartModal').animate({
     //             opacity:0,
