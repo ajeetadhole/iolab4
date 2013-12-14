@@ -25,4 +25,6 @@ Vanessa McAfee - JavaScript/jQuery/jQueryUI work, working with last.fm API and g
 <p>http://people.ischool.berkeley.edu/~ajeeta/iolab4/</p>
 
 <h3>Known Bugs</h3>
+Sometimes, the markers take a while to show up on initial load.
+Prior merge conflicts resolved.
 <p></p>
