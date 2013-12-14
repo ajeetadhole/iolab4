@@ -63,6 +63,21 @@ $(document).ready(function(){
         }
     );
 
+    $("#legend #legendlist").on("mouseover", ".legendItem a",function(){
+      $(this).css({
+          color:'#eb5635',
+      });
+
+}
+);
+    $("#legend #legendlist").on("mouseout", ".legendItem a",function(){
+      $(this).css({
+          color:'#333',
+      });
+
+}
+);
+
     // $('#marker').hover(
     //     function(){
     //         $('#trackHoverCard').css({
