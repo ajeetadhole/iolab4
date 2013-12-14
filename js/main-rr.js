@@ -13,13 +13,11 @@
         cache     : cache
     });
 
-
     //Global vars
     var TOPTRACKS = [];
     var TOPCHARTS =[];
     var METROS={};
     var MAPDATA=[];
-    var LEGENDVIDEO=[];
 
     //use these for displaying legend
     var ALLTOPTRACKS = [];
@@ -41,23 +39,18 @@
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });    
-    var marker;
+    var marker,data;
 
     //deferred object: Indicates that all TOPTRACKS are processed
     var getDataDone = $.Deferred();
     //deferred object: Indicates that all Metros are processed
     var getMetroDataDone = $.Deferred();
 
-
-
-
 /*---Page Load------*/
 $(window).load(function () {
     $('#ytapiplayer').show();
     console.log("doc load");
-    //TODO - Need to pass the artist and track on the click event in modal
-    //loadPlayer("royals", "royals");
-    
+  
     //start: added by dheera
 
     //display map by gettin all metros for last.fm from metros.json file which is a cached JSON file with information about metros that last.fm operates in  
@@ -66,13 +59,11 @@ $(window).load(function () {
         $.each(datainner.metros.metro,function(key,valueinner){
           //console.log("City "+valueinner.name+" Latitude "+valueinner.Latitude+" Longitude "+valueinner.Longitude);
           citymap[valueinner.name]={center:new google.maps.LatLng(valueinner.Latitude, valueinner.Longitude),population:100,Country: valueinner.Country};
-
         });
         initialize();
       }).fail(function() {
         console.log("FIRST fail");
       });
-
     //end: added by dheera
 
     getMetroData();
@@ -82,7 +73,6 @@ $(window).load(function () {
         console.log("Got Metro Data ");
         //getData();
         getChartData()
-
     })
 
     $.when(getDataDone).then(function(){
@@ -93,21 +83,118 @@ $(window).load(function () {
     
     $("#legend #legendlist").on("click", ".legendItem",function(){
       $('#videoPlayer').animate({
-          opacity:1,
+          opacity:1
       },300);
       $('#videoPlayer').css({
-          display:'block',
+          display:'block'
       });
       console.log("in li click");
       var text = $(this).find("p").text();
       loadPlayer(text,text);
+    });
+
+    $('#modalClose').click( function() {
+               $(".chart").empty();
+               $('#modal').animate({
+              opacity:0
+            },300);
+            $('#modal').css({
+              display:'none'
+            });
+          });
+     var viewportWidth = $(window).width();
+    var viewportHeight = $(window).height();
+    var infoHeight = $('#info').height();
+    var infoWidth = $('#info').width();
+
+    $('#mapWrapper').css({
+        width: viewportWidth,
+        height: viewportHeight,
+    });
+
+    $('#modal').css({
+        width: viewportWidth,
+        height: viewportHeight,
+    });
+
+    $('#infoWrapper').css({
+        width: viewportWidth,
+        height: viewportHeight,
+    });
+
+    $('#legend').hide();
+
+    $('#legendHeaderMin').click(
+        function(){
+            $(this).css({
+                display:'none',
+            });
+            $('#legend').toggle(100);
+        }
+    );
+
+    $('#legendHeaderMax').click(
+        function(){
+            $('#legendHeaderMin').css({
+                display:'block',
+            });
+            $('#legend').toggle(100);
+        }
+    );
+
+    $('#info').css({
+        left:(viewportWidth-infoWidth)/2,
+    });
+
+    $('#info').delay(2200).animate({
+        top:120,
+        opacity:1,
+    },300);
+
+    $('#infoClose, #exploreButton').click(
+        function(){
+            $('#info').animate({
+                top:-350,
+                opacity:0,
+            },300);
+            $('#infoWrapper').delay(400).animate({
+                opacity:0,
+                zIndex:10,
+            },300);
+            $('#infoWrapper').css({
+                display:'none',
+            });
+        }
+    );
+
+    $("#legend #legendlist").on("mouseover", ".legendItem a",function(){
+      $(this).css({
+          color:'#eb5635',
+      });
 
 }
 );
-    
+    $("#legend #legendlist").on("mouseout", ".legendItem a",function(){
+      $(this).css({
+          color:'#333',
+      });
+
+}
+);
+
+    $("#trackHoverChart").on("click",function(){
+      $('#modal').animate({
+          opacity:1,
+      },300);
+      $('#modal').css({
+          display:'block',
+      });
+      console.log("in li click");
+
+}
+);
 
 });
-
 
 function initialize() {
 
@@ -115,12 +202,13 @@ function initialize() {
   geocoder = new google.maps.Geocoder();
   var latlng = new google.maps.LatLng(37.7002, -122.406);
   var mapOptions = {
-    zoom: 3,
-    center: latlng
+    zoom: 2,
+    minZoom: 2,
+    center: latlng,
+    mapTypeControl: false,
   };
   var map = new google.maps.Map(document.getElementById('map-canvas'),
   mapOptions);
-
 
   //get top track for each metro: {cityname:track}
   
@@ -137,10 +225,8 @@ function initialize() {
           //sort the legend array
           toptrackslegend=toptrackslegend.sort();
           console.log("toptrackslegend = "+toptrackslegend);
-
       
           //code for getting unique tracks for displaying the legend
-
             
               var hash = {}, result = [];
               for ( var i = 0, l = toptrackslegend.length; i < l; ++i ) {
@@ -159,8 +245,8 @@ function initialize() {
           var randcolor = result[Math.floor(Math.random() * result.length)];
           for(var index=0;index<result.length;index++)
           {
+            //$("#legendlist").append('<li class="legendItem"><span class="trackLegendColor" style="background:'+colors[index]+';"></span><p class="trackLegendName">'+result[index]+'</p></li>');
             $("#legendlist").append('<li class="legendItem"><span class="trackLegendColor" style="background:'+colors[index]+';"></span><p class="trackLegendName"><a href=#>'+result[index]+'</a></p></li>');
-          
           }
 
       // Construct the circle for each value in citymap.
@@ -204,12 +290,13 @@ function initialize() {
           
           google.maps.event.addListener(marker, "mouseover", function() {
             
+            
               console.log("hovered city="+this.getPosition().lat());
               var hovercity, hovercontent,toptracknametemp,toptrackartisttemp,toptrackurltemp,trackindextemp,metrocolortemp,toptrackartistimgtemp;
               for (var city in citymap) {
                 if(citymap[city]['center']['nb']==this.getPosition().lat()&&citymap[city]['center']['ob']==this.getPosition().lng()){
                     hovercity=city;
-                    
+      
                     //get the track for the hovered city
                     for (var iterate=0;iterate<ALLTOPTRACKS.length;iterate++)
                     {
@@ -219,6 +306,8 @@ function initialize() {
                           toptrackartisttemp=ALLTOPTRACKS[iterate]["toptrackartist"];
                           toptrackurltemp=ALLTOPTRACKS[iterate]["toptrackurl"];
                           toptrackartistimgtemp=ALLTOPTRACKS[iterate]["toptrackartistimg"];
+                          data=ALLTOPTRACKS[iterate]["toptentracks"];//data for viz
+
 
                           trackindextemp=result.indexOf(ALLTOPTRACKS[iterate]["toptrack"]);
                           metrocolortemp=colors[trackindex];
@@ -227,27 +316,127 @@ function initialize() {
                        
                     }
 
-                     hovercontent = '<p id="trackHoverMetro">Metro: '+city+'</p><div><img id="trackHoverImg" src='+toptrackartistimgtemp+'></img><div><p class="trackHoverMeta">Top Track: '+toptracknametemp+'</p><p class="trackHoverMeta">Artist: '+toptrackartisttemp+'</p></div></div>';
-                    //' <div id="marker"> <div id="trackHoverCard"><div class="trackHoverMeta"> <div id="trackHoverArt"><span id="trackHoverPlay">'+toptrackurltemp+'</span></div><div id="trackHoverTitle"><span id="trackHoverName">'+city+'</span><span id="trackHoverName">'+toptracknametemp+'</span> <span id="trackHoverArtist">'+toptrackartisttemp+'</span></div></div> </div> </div>';
-
+                     hovercontent = '<p id="trackHoverMetro">Metro: '+city+'</p><div><img id="trackHoverImg" src='+toptrackartistimgtemp+'></img><div><p class="trackHoverMeta">Top Track: '+toptracknametemp+'</p><p class="trackHoverMeta">Artist: '+toptrackartisttemp+'</p></div></div><p id="trackHoverChart"><a onclick=onClickInfoWindow()>Top Ten Tracks for '+city+'</a></p>';
                 }
               }
               
-
               infowindow.setPosition(this.getPosition());
               infowindow.setContent(hovercontent);
               marker.setPosition(this.getPosition());
-              infowindow.open(map,marker);
-            
+    
+        //dheera: start viz
 
+                    // Set color values. Currently using 10 colors and assign based on Artist Name
+                    var color = d3.scale.category10();
+
+
+                    // Create list of unique artists to determine color value
+                    var artist = []
+                    for (i=0;i<data.length;i++) {
+                      artist.push(data[i].artist.name) 
+                      console.log(data[i].artist.name);
+                    }
+                    
+                    var uniqueArtist = artist.filter(function(elem, pos) {
+                        return artist.indexOf(elem) == pos;
+                    })
+
+                    // SVG variables
+                    var width = $(window).width()-200,
+                        barHeight = 50,
+                        max_poularity = d3.max(data, function(d) { return d.listeners;});
+
+                    var x = d3.scale.linear()
+                        .domain([0, max_poularity])
+                        .range([0, width-100]);
+
+                    var chart = d3.select(".chart")
+                        .attr("width", width)
+                        .attr("height", barHeight * data.length);
+
+                    // Bind data to the bars
+                    var bar = chart.selectAll("g")
+                        .data(data)
+                        .enter().append("g")
+                        .attr("transform", function(d, i) { return "translate(100," + i * barHeight + ")"; })
+                        .attr("class","bar");
+
+                    // Add play on hover
+                    bar.append("text")
+                        .text("Play Track")
+                        .attr("x", function(d) { return x(Number(d.listeners)) - 22; })
+                        .attr("y", "28")
+                        .attr("opacity", 0)
+                        .attr("class", "video")
+
+                    // Draw bars. Fill color based on artist name. Bars transition starting from 0
+                    bar.append("rect")
+                        .attr("fill", function(d) {return color(uniqueArtist.indexOf(d.artist.name))})
+                        .attr("opacity", 0.8)
+                        .attr("width", 0)
+                        .transition()
+                        .duration(2000)
+                        .attr("width", function(d) { return x(Number(d.listeners/1.5))})
+                        .attr("height", barHeight - 1);
+
+                    // Add album cover image
+                    bar.append("rect")
+                           .attr("width","50")
+                           .attr("height","49")
+                           .attr("x", "-50")
+                           .attr("class","album-art");
+
+                    // Add chart position number
+                    bar.append("text")
+                        .text(function(d,i) { return i+1; })
+                        .attr("x", "-11")
+                        .attr("y", "27")
+                        .attr("class", "count");
+                         
+                   // Add track title and link to play song?
+                    bar.append("svg:a")
+                        .append("text")
+                        .text(function(d) { return d.name; })
+                        .attr("class", "track")
+                        .attr("x", "10")
+                        .attr("y", "22");
+
+                    // Add artist name and link to last fm page?
+                    bar.append("svg:a")
+                        .attr("class", "playsong")
+                        .append("text")
+                        .text(function(d) { return d.artist.name; })
+                        .attr("class", "artist")
+                        .attr("x", "10")
+                        .attr("y", "38");
+
+                    d3.selectAll("rect").on("click", function (d) {
+                      $('div#videoPlayer').animate({opacity:1},300);
+                      $('div#videoPlayer').css({display:'block'});
+                      console.log("d.name");
+                      console.log(d.name);
+                      loadPlayer(d.artist.name,d.name);
+                    });
+                    
+                    d3.selectAll(".bar").on("mouseover", function (d) {
+                      $(this).animate({opacity:0.85},200);
+                    });
+
+                    d3.selectAll(".bar").on("mouseout", function (d) {
+                      $(this).animate({opacity:1},200);
+                    });
+
+
+                    //dheera: end viz
+
+              infowindow.open(map,marker);
+              
           }); 
           //clear the contents of the infwindow on closeclick
           google.maps.event.addListener(infowindow, 'closeclick', function() {
                 infowindow.setContent('');
           });
 //hover event: end
-
-
 
           // On click
 
@@ -265,9 +454,24 @@ function initialize() {
 
       });
 
-   
+}
+
+function onClickInfoWindow(){
+    $("p#trackHoverChart").on("click",function(){
+                console.log("inside infowindow click event");
+
+                
+                $('#modal').animate({
+              opacity:1
+            },300);
+            $('#modal').css({
+              display:'block',
+            });
+            $("#modal").append('<p id="chartTitle">'+city+'</p>');
+              });
 
 }
+
 
 function getmodal(marker) {
   window.alert(marker.title)
@@ -351,6 +555,7 @@ function getData(){
 function getTopTracks(country,city){
 //dheera start
 var url="http://ws.audioscrobbler.com/2.0/?method=geo.getTopTracks&api_key="+apiKey+"&country="+country+"&city="+city+"&format=json";
+var dataTopTenTracks;
 $.getJSON(url,function(data) {
   var index=0;
     $.each(data, function(key, value) {
@@ -369,12 +574,14 @@ $.getJSON(url,function(data) {
             //TOPTRACKS[index].toptracks['@attr']['metro'] =city;
            TOPTRACKS.push(objtoptracks);
 
+           dataTopTenTracks = data.toptracks.track.slice(0,10)
+          
+
             obj["city"]=city;
             obj["country"]=country;
             obj["toptrack"]=data.toptracks.track[0]["name"];
-            obj["toptrack"]=data.toptracks.track[0]["name"];
             obj["toptrackurl"]=data.toptracks.track[0]["url"];
-
+            obj["toptentracks"]=dataTopTenTracks;
 
             obj["toptrackartist"]=data.toptracks.track[0]["artist"]["name"];
             
@@ -411,72 +618,6 @@ $.getJSON(url,function(data) {
 }
 /* End of code for getting top tracks for each metro */
 
-/*
-function getTopTracks(country, metro){
-    lastfm.geo.getTopTracks
-    ({
-        country:country,
-        location:metro
-    },
-    {
-        success: function(data) {
-            TOPTRACKS.push(data);
-            console.log(TOPTRACKS); 
-
-          //start: added by dheera
-            obj["city"]=metro;
-            obj["country"]=country;
-            obj["toptrack"]=data.toptracks.track[0]["name"];
-            
-            ALLTOPTRACKS.push(obj);
-
-            obj = {};
-
-        if(ALLTOPTRACKS.length==237){
-          console.log("array length "+ALLTOPTRACKS.length);
-           getDataDone.resolve(); 
-
-          }
-
-        //end: added by dheera
-
-        },
-        error: function(data) {
-            console.log("getTopTracks: " + data.error + " " + data.message);
-        }
-    });
-}
-
-var renderTopTracksVar = function renderTopTracks(){
-    console.log("Inside render tracks");
-    console.log(TOPTRACKS);
-    lastfm.geo.getTopTracks({
-        country:country,
-        limit: 1
-    },
-    {
-        success: function() 
-        {
-            //console.log("top artists");
-            $.each( TOPTRACKS, function( key, value ) 
-            {
-
-            console.log( TOPTRACKS );
-
-
-            }
-            );
-
-           //$('#top_tracks').html( $('#lastfmTemplateTracks').render(data.track[i]));
-            // do something
-        },
-        error: function() 
-        {
-            console.log("getTopArtists: ");
-        }
-    });
-}
-*/
 
 /*Assembles the Data for top charts */
 function getChartData(){
@@ -544,7 +685,6 @@ function loadPlayer(artist, track) {
             var atts = { id: "myytplayer" };
             swfobject.embedSWF("http://www.youtube.com/v/" + mId + "?enablejsapi=1&playerapiid=ytplayer&version=3&autoplay=1&autohide=0",
                            "ytapiplayer", "300", "200", "8", null, null, params, atts);
-            // if we decide to show the video the height, which is currently "40," can be increased like "200"
         } else {
          
           player.loadVideoById(mId, 0, "large");
