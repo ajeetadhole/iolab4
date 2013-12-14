@@ -6,7 +6,7 @@
 <p>Music is not visual after all. But when there are millions of songs, it is useful to have some tools to help with the process of discovery, aided by visualisations that “tell a story, and engage our pattern-matching brain” (Donaldson & Lamere, ISMIR 2009).
 </p>
 
-<p>With the abundance of available music, discovering music is a difficult task. Music Map helps enhance your experience of discovering popular and trendig music worldwide. Our application is targeted not only to music lovers, but also music trend analysts, pulishers, and event organisers who are interested in what people in specific locations are listening to.</p>
+<p>With the abundance of available music, discovering music is a difficult task. Music Map helps enhance your experience of discovering popular and trendig music worldwide. Our application is targeted not only to music lovers, but also music trend analysts, pulishers, and event organisers who are interested in what people in various locations are listening to.</p>
 
 <h3>Information Organization Challenges for Music Map</h3>
 
