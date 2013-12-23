@@ -522,13 +522,13 @@ function onClickInfoWindow(){
                     });
                     
                     d3.selectAll(".bar").on("mouseover", function (d) {
-                      $(this).animate({opacity:0.75},200);
+                      $(this).animate({opacity:0.85},0);
                       $(this).find(".play").animate({opacity:1},0);
                       $(this).find(".count").animate({opacity:0},0);
                     });
 
                     d3.selectAll(".bar").on("mouseout", function (d) {
-                      $(this).animate({opacity:1},200);
+                      $(this).animate({opacity:1},0);
                       $(this).find(".play").animate({opacity:0},0);
                       $(this).find(".count").animate({opacity:1},0);
                     });
