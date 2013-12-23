@@ -3,6 +3,8 @@
     var apiKey = 'ef52d33ae515465c74fe383a71089f43';
     var apiSecret = '2ac7e97f4fff53f76ecd2f5f376e71a3';
 
+    var hovercity;
+
     // create a Cache object
     var cache = new LastFMCache();
 
@@ -37,7 +39,8 @@
       ' <span id="modalClose">X</span>'+
       '</div>';
     var infowindow = new google.maps.InfoWindow({
-      content: contentString
+      content: contentString,
+      floatShadow: 1
     });    
     var marker,data;
 
@@ -82,6 +85,27 @@ $(window).load(function () {
     })
     
     $("#legend #legendlist").on("click", ".legendItem",function(){
+      $(".playTrack").animate({
+          opacity:0,
+          zIndex:110,
+      },0);
+      $(".playTrack").css({
+          display:'none',
+      });
+      $(".legendItem a").css({
+          color:"#333",
+      });
+      $(this).find(".playTrack").animate({
+          opacity:1,
+          zIndex:120,
+      },0);
+      $(this).find(".playTrack").css({
+          display:'block',
+          backgroundImage: 'http://people.ischool.berkeley.edu/~ajeeta/iolab4/js/playingwhite.png',
+      });
+      $(this).find("a").css({
+          color:"rgba(235, 86, 53, 1.0)",
+      });
       $('#videoPlayer').animate({
           opacity:1
       },300);
@@ -93,6 +117,38 @@ $(window).load(function () {
       loadPlayer(text,text);
     });
 
+    $("#legend #legendlist").on("mouseover", ".legendItem",function(){
+      if($(this).find(".playTrack").css("zIndex")!=120){
+        $(this).find("a").css({
+            color:"rgba(235, 86, 53, 1.0)",
+        });
+        $(this).find(".playTrack").animate({
+            opacity:1,
+            zIndex:110,
+        },0);
+
+        $(this).find(".playTrack").css({
+            display:'block',
+        });
+      }
+    });
+
+    $("#legend #legendlist").on("mouseout", ".legendItem",function(){
+      if($(this).find(".playTrack").css("zIndex")!=120){
+        $(this).find("a").css({
+            color:"#333",
+        });
+        $(this).find(".playTrack").animate({
+            opacity:0,
+            zIndex:110,
+        },0);
+        $(this).find(".playTrack").css({
+            display:'none',
+        });
+      }
+    });
+
+
     $('#modalClose').click( function() {
                $(".chart").empty();
                $('#modal').animate({
@@ -102,7 +158,7 @@ $(window).load(function () {
               display:'none'
             });
           });
-     var viewportWidth = $(window).width();
+    var viewportWidth = $(window).width();
     var viewportHeight = $(window).height();
     var infoHeight = $('#info').height();
     var infoWidth = $('#info').width();
@@ -112,8 +168,7 @@ $(window).load(function () {
         height: viewportHeight,
     });
 
-    $('#modal').css({
-        width: viewportWidth,
+     $('.chart').css({
         height: viewportHeight,
     });
 
@@ -122,7 +177,7 @@ $(window).load(function () {
         height: viewportHeight,
     });
 
-    $('#legend').hide();
+    $('#legendHeaderMin').hide();
 
     $('#legendHeaderMin').click(
         function(){
@@ -166,33 +221,6 @@ $(window).load(function () {
             });
         }
     );
-
-    $("#legend #legendlist").on("mouseover", ".legendItem a",function(){
-      $(this).css({
-          color:'#eb5635',
-      });
-
-}
-);
-    $("#legend #legendlist").on("mouseout", ".legendItem a",function(){
-      $(this).css({
-          color:'#333',
-      });
-
-}
-);
-
-    $("#trackHoverChart").on("click",function(){
-      $('#modal').animate({
-          opacity:1,
-      },300);
-      $('#modal').css({
-          display:'block',
-      });
-      console.log("in li click");
-
-}
-);
 
 });
 
@@ -246,7 +274,7 @@ function initialize() {
           for(var index=0;index<result.length;index++)
           {
             //$("#legendlist").append('<li class="legendItem"><span class="trackLegendColor" style="background:'+colors[index]+';"></span><p class="trackLegendName">'+result[index]+'</p></li>');
-            $("#legendlist").append('<li class="legendItem"><span class="trackLegendColor" style="background:'+colors[index]+';"></span><p class="trackLegendName"><a href=#>'+result[index]+'</a></p></li>');
+            $("#legendlist").append('<li class="legendItem"><span class="trackLegendColor" style="background:'+colors[index]+';"></span><span class="playTrack"></span><p class="trackLegendName"><a href=#>'+result[index]+'</a></p></li>');
           }
 
       // Construct the circle for each value in citymap.
@@ -296,6 +324,7 @@ function initialize() {
               for (var city in citymap) {
                 if(citymap[city]['center']['nb']==this.getPosition().lat()&&citymap[city]['center']['ob']==this.getPosition().lng()){
                     hovercity=city;
+                    console.log(hovercity);
       
                     //get the track for the hovered city
                     for (var iterate=0;iterate<ALLTOPTRACKS.length;iterate++)
@@ -307,16 +336,12 @@ function initialize() {
                           toptrackurltemp=ALLTOPTRACKS[iterate]["toptrackurl"];
                           toptrackartistimgtemp=ALLTOPTRACKS[iterate]["toptrackartistimg"];
                           data=ALLTOPTRACKS[iterate]["toptentracks"];//data for viz
-
-
-                          trackindextemp=result.indexOf(ALLTOPTRACKS[iterate]["toptrack"]);
-                          metrocolortemp=colors[trackindex];
                           
                         }
                        
                     }
 
-                     hovercontent = '<p id="trackHoverMetro">Metro: '+city+'</p><div><img id="trackHoverImg" src='+toptrackartistimgtemp+'></img><div><p class="trackHoverMeta">Top Track: '+toptracknametemp+'</p><p class="trackHoverMeta">Artist: '+toptrackartisttemp+'</p></div></div><p id="trackHoverChart"><a onclick=onClickInfoWindow()>Top Ten Tracks for '+city+'</a></p>';
+                     hovercontent = '<div id="trackHoverMetro"><p>Metro: '+city+'</p></div><a onclick=playVideo()><div id="topTrackInfo"><img id="trackHoverImg" src='+toptrackartistimgtemp+'></img><span class="playVideo"></span><div><p id="hoverTrack" class="trackHoverMeta">Top Track: '+toptracknametemp+' </p><p class="trackHoverMeta">Artist: '+toptrackartisttemp+'</p></div></div></a><div id="trackHoverChart"><p><a onclick=onClickInfoWindow()>Top Ten Tracks for '+city+'</a></p></div>';
                 }
               }
               
@@ -324,110 +349,7 @@ function initialize() {
               infowindow.setContent(hovercontent);
               marker.setPosition(this.getPosition());
     
-        //dheera: start viz
-
-                    // Set color values. Currently using 10 colors and assign based on Artist Name
-                    var color = d3.scale.category10();
-
-
-                    // Create list of unique artists to determine color value
-                    var artist = []
-                    for (i=0;i<data.length;i++) {
-                      artist.push(data[i].artist.name) 
-                      console.log(data[i].artist.name);
-                    }
-                    
-                    var uniqueArtist = artist.filter(function(elem, pos) {
-                        return artist.indexOf(elem) == pos;
-                    })
-
-                    // SVG variables
-                    var width = $(window).width()-200,
-                        barHeight = 50,
-                        max_poularity = d3.max(data, function(d) { return d.listeners;});
-
-                    var x = d3.scale.linear()
-                        .domain([0, max_poularity])
-                        .range([0, width-100]);
-
-                    var chart = d3.select(".chart")
-                        .attr("width", width)
-                        .attr("height", barHeight * data.length);
-
-                    // Bind data to the bars
-                    var bar = chart.selectAll("g")
-                        .data(data)
-                        .enter().append("g")
-                        .attr("transform", function(d, i) { return "translate(100," + i * barHeight + ")"; })
-                        .attr("class","bar");
-
-                    // Add play on hover
-                    bar.append("text")
-                        .text("Play Track")
-                        .attr("x", function(d) { return x(Number(d.listeners)) - 22; })
-                        .attr("y", "28")
-                        .attr("opacity", 0)
-                        .attr("class", "video")
-
-                    // Draw bars. Fill color based on artist name. Bars transition starting from 0
-                    bar.append("rect")
-                        .attr("fill", function(d) {return color(uniqueArtist.indexOf(d.artist.name))})
-                        .attr("opacity", 0.8)
-                        .attr("width", 0)
-                        .transition()
-                        .duration(2000)
-                        .attr("width", function(d) { return x(Number(d.listeners/1.5))})
-                        .attr("height", barHeight - 1);
-
-                    // Add album cover image
-                    bar.append("rect")
-                           .attr("width","50")
-                           .attr("height","49")
-                           .attr("x", "-50")
-                           .attr("class","album-art");
-
-                    // Add chart position number
-                    bar.append("text")
-                        .text(function(d,i) { return i+1; })
-                        .attr("x", "-11")
-                        .attr("y", "27")
-                        .attr("class", "count");
-                         
-                   // Add track title and link to play song?
-                    bar.append("svg:a")
-                        .append("text")
-                        .text(function(d) { return d.name; })
-                        .attr("class", "track")
-                        .attr("x", "10")
-                        .attr("y", "22");
-
-                    // Add artist name and link to last fm page?
-                    bar.append("svg:a")
-                        .attr("class", "playsong")
-                        .append("text")
-                        .text(function(d) { return d.artist.name; })
-                        .attr("class", "artist")
-                        .attr("x", "10")
-                        .attr("y", "38");
-
-                    d3.selectAll("rect").on("click", function (d) {
-                      $('div#videoPlayer').animate({opacity:1},300);
-                      $('div#videoPlayer').css({display:'block'});
-                      console.log("d.name");
-                      console.log(d.name);
-                      loadPlayer(d.artist.name,d.name);
-                    });
-                    
-                    d3.selectAll(".bar").on("mouseover", function (d) {
-                      $(this).animate({opacity:0.85},200);
-                    });
-
-                    d3.selectAll(".bar").on("mouseout", function (d) {
-                      $(this).animate({opacity:1},200);
-                    });
-
-
-                    //dheera: end viz
+   
 
               infowindow.open(map,marker);
               
@@ -457,19 +379,203 @@ function initialize() {
 }
 
 function onClickInfoWindow(){
-    $("p#trackHoverChart").on("click",function(){
-                console.log("inside infowindow click event");
+    $("#trackHoverChart").on("click",function(){
+        console.log("inside infowindow click event");
 
-                
-                $('#modal').animate({
-              opacity:1
-            },300);
-            $('#modal').css({
-              display:'block',
-            });
-            $("#modal").append('<p id="chartTitle">'+city+'</p>');
-              });
+        $('#modal').animate({
+            opacity:1
+        },300);
+        $('#modal').css({
+            display:'block',
+        });
+        renderModalData();
+        $(".chart").empty();
 
+
+             //dheera: start viz
+
+                    // Set color values. Currently using 10 colors and assign based on Artist Name
+                    var color = d3.scale.category10();
+
+
+                    // Create list of unique artists to determine color value
+                    var artist = []
+                    for (i=0;i<data.length;i++) {
+                      artist.push(data[i].artist.name) 
+                      //console.log(data[i].artist.name);
+                    }
+                    
+                    var uniqueArtist = artist.filter(function(elem, pos) {
+                        return artist.indexOf(elem) == pos;
+                    })
+
+                    // SVG variables
+                    var width = $(window).width()-200,
+                        barHeight = 50,
+                        max_poularity = d3.max(data, function(d) { return d.listeners;});
+
+                    var x = d3.scale.linear()
+                        .domain([0, max_poularity])
+                        .range([0, width-100]);
+
+                    var chart = d3.select(".chart")
+                        .attr("width", width);
+                        
+
+                    var header = chart.select("g")
+      
+                    // Bind data to the bars
+                    var bar = chart.selectAll("g")
+                        .data(data)
+                        .enter().append("g")
+                        .attr("transform", function(d, i) { return "translate(100," + i * barHeight + ")"; })
+                        .attr("class","bar");
+
+                    // Draw bars. Fill color based on artist name. Bars transition starting from 0
+                    bar.append("rect")
+                        .attr("fill", function(d) {return color(uniqueArtist.indexOf(d.artist.name));})
+                        .attr("opacity", 0.8)
+                        .attr("width", 0)
+                        .attr("x", "-60")
+                        .transition()
+                        .duration(1200)
+                        .attr("width", function(d) { return x(Number(d.listeners/2.2));})
+                        .attr("height", barHeight - 1);
+
+                    // Add album cover image
+                    bar.append("rect")
+                           .attr("width","50")
+                           .attr("height","49")
+                           .attr("x", "-110")
+                           .attr("class","album-art");
+
+                    // Add chart position number
+                    bar.append("text")
+                        .text(function(d,i) { return i+1; })
+                        .attr("x", "-71")
+                        .attr("y", "23")
+                        .attr("opacity", "1")
+                        .attr("class", "count");
+
+                    bar.append("image")
+                        .attr("xlink:href", "http://people.ischool.berkeley.edu/~ajeeta/iolab4/js/playing.png")
+                        .attr("width","50")
+                        .attr("height","49")
+                        .attr("x", "-111")
+                        .attr("opacity", "0")
+                        .attr("class", "playing");
+
+                    bar.append("image")
+                        .attr("xlink:href", "http://people.ischool.berkeley.edu/~ajeeta/iolab4/js/play.png")
+                        .attr("width","50")
+                        .attr("height","49")
+                        .attr("x", "-111")
+                        .attr("opacity", "0")
+                        .attr("class", "play");
+
+                    bar.append("text")
+                        .text("Play Track")
+                        .attr("x", function(d) { return x(Number(d.listeners/1.6)-24);})
+                        .attr("y", "22")
+                        .attr("opacity", "0")
+                        .attr("class", "playSong");
+                         
+                   // Add track title and link to play song?
+                    bar.append("svg:a")
+                        .append("text")
+                        .text(function(d) { return d.name; })
+                        .attr("class", "track")
+                        .attr("x", "-50")
+                        .attr("y", "20");
+
+                    // Add artist name and link to last fm page?
+                    bar.append("svg:a")
+                        .append("text")
+                        .text(function(d) { return d.artist.name; })
+                        .attr("class", "artist")
+                        .attr("x", "-50")
+                        .attr("y", "38");
+
+                    d3.selectAll(".bar").on("click", function (d) {
+                      $('div#videoPlayer').animate({opacity:1},300);
+                      $('div#videoPlayer').css({display:'block'});
+                      $(".play").animate({opacity:0},0);
+                      $(".playing").animate({opacity:0},0);
+                      $(".count").animate({opacity:1},0);
+                      $(".playTrack").animate({
+                          opacity:0,
+                          zIndex:110,
+                      },0);
+                      $(".playTrack").css({
+                          display:'none',
+                      });
+                      $(".legendItem a").css({
+                          color:"#333",
+                      });
+                      $(this).find(".playing").animate({opacity:1},0);
+                      $(this).find(".play").animate({opacity:0},0);
+                      $(this).find(".playing").animate({opacity:1},0);
+                      $(".bar").animate({opacity:1},200);
+                      var currentTrack = $(this).find(".track").text();
+                      //console.log(currentTrack);
+                      loadPlayer(currentTrack,currentTrack);
+                    });
+                    
+                    d3.selectAll(".bar").on("mouseover", function (d) {
+                      $(this).animate({opacity:0.75},200);
+                      $(this).find(".play").animate({opacity:1},0);
+                      $(this).find(".count").animate({opacity:0},0);
+                    });
+
+                    d3.selectAll(".bar").on("mouseout", function (d) {
+                      $(this).animate({opacity:1},200);
+                      $(this).find(".play").animate({opacity:0},0);
+                      $(this).find(".count").animate({opacity:1},0);
+                    });
+
+                    chart.append("text")
+                        .attr("x", -10)             
+                        .attr("y", -45)
+                        .attr("class", "chartTitle") 
+                        .text("Top Ten Tracks for Metro");
+
+                    chart.append("text")
+                        .attr("x", -10)             
+                        .attr("y", -20)
+                        .attr("class", "chartLegend") 
+                        .text("* Each artist is represented by a unique color");
+
+
+                    //dheera: end viz
+    });
+}
+
+function playVideo(){
+$("#topTrackInfo").on("click",function(){
+      $('#videoPlayer').animate({
+          opacity:1
+      },300);
+      $('#videoPlayer').css({
+          display:'block'
+      });
+      $(".playTrack").animate({
+          opacity:0,
+          zIndex:110,
+      },0);
+      $(".playTrack").css({
+          display:'none',
+      });
+      $(".legendItem a").css({
+          color:"#333",
+      });
+      $(this).find(".trackHoverMeta").css({
+          color:'#eb5635',
+      });
+      console.log("in li click");
+      var text = $(this).find("#hoverTrack").text().slice(11);
+      console.log(text);
+      loadPlayer(text,text);
+    });
 }
 
 
